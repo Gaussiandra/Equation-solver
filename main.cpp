@@ -57,7 +57,7 @@ bool isEqual(double a, double b, double eps) {
 }
 
 /**
- * Check corner cases in solveQuadraticEquation function.
+ * Checks corner cases in solveQuadraticEquation function.
  */
 void testCornerCases() {
     struct testData {
