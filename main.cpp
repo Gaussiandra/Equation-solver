@@ -12,7 +12,7 @@ typedef enum NROOTS_STATUS {
 } NROOTS_STATUS;
 
 bool isEqual(double a, double b, double eps = EPS);
-bool testCornerCases();
+void testCornerCases();
 NROOTS_STATUS solveLinearEquation(double a, double b, double *root);
 NROOTS_STATUS solveQuadraticEquation(double a, double b, double c, double *root1, double *root2);
 
@@ -57,10 +57,9 @@ bool isEqual(double a, double b, double eps) {
 }
 
 /**
- * !!!!
- * @return
+ * Check corner cases in solveQuadraticEquation function.
  */
-bool testCornerCases() {
+void testCornerCases() {
     struct testData {
         double a, b, c, root1, root2;
         NROOTS_STATUS status;
@@ -69,7 +68,9 @@ bool testCornerCases() {
     testData tests[] = {
             {1, 3, -4, 1, -4, TWO},
             {0, 2, -2, 1, 0, ONE},
+            {1, 2, 1, -1, 0, ONE},
             {1, 2, 3, 0, 0, ZERO},
+            {0, 0, 30, 0, 0, ZERO},
             {0, 0, 0, 0, 0, INF},
     };
 
@@ -106,7 +107,7 @@ NROOTS_STATUS solveLinearEquation(double a, double b, double *root) {
 /**
  * Solves quadratic equation.
  * @a, @b, @c - coefficients of the equation.
- * @root1, @root2 - calculated roots(if they exist) will be put here in descent order.
+ * @root1, @root2 - calculated roots(if they exist) will be put here in descending order.
  * @return NROOTS_STATUS of found roots.
  */
 NROOTS_STATUS solveQuadraticEquation(double a, double b, double c, double *root1, double *root2) {
