@@ -6,6 +6,6 @@ enum NROOTS_STATUS {
 };
 
 bool isEqual(double a, double b, double eps);
-void testCornerCases();
+bool testsPassed();
 NROOTS_STATUS solveLinearEquation(double a, double b, double *root);
 NROOTS_STATUS solveQuadraticEquation(double a, double b, double c, double *root1, double *root2);

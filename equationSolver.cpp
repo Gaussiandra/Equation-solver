@@ -6,7 +6,9 @@
 const double EPS = 1e-9;
 
 int main() {
-    testCornerCases();
+    if (!testsPassed()) {
+        return 1;
+    }
     printf("This program solves quadratic equation.\n\n");
 
     double a = 0, b = 0, c = 0;
@@ -48,7 +50,7 @@ bool isEqual(double a, double b, double eps = EPS) {
 /**
  * Check corner cases in solveQuadraticEquation function.
  */
-void testCornerCases() {
+bool testsPassed() {
     struct testData {
         double a, b, c, root1, root2;
         NROOTS_STATUS status;
@@ -78,9 +80,7 @@ void testCornerCases() {
        }
     }
 
-    if (hasErrors) {
-        exit(1);
-    }
+    return !hasErrors;
 }
 
 /**
