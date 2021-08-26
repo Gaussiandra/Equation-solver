@@ -42,7 +42,7 @@ int main() {
  * @a, @b - doubles to check for equality.
  */
 bool isEqual(double a, double b, double eps = EPS) {
-    return abs(a - b) < eps;
+    return fabs(a - b) < eps;
 }
 
 /**
