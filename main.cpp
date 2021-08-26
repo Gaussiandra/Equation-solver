@@ -1,20 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
-
-const double EPS = 1e-9;
-
-enum NROOTS_STATUS {
-    ZERO_ROOTS,
-    ONE_ROOT,
-    TWO_ROOTS,
-    INF_ROOTS,
-};
-
-bool isEqual(double a, double b, double eps = EPS);
-void testCornerCases();
-NROOTS_STATUS solveLinearEquation(double a, double b, double *root);
-NROOTS_STATUS solveQuadraticEquation(double a, double b, double c, double *root1, double *root2);
+#include "declarations.h"
 
 int main() {
     testCornerCases();
@@ -66,12 +53,12 @@ void testCornerCases() {
     };
 
     testData tests[] = {
-            {1, 3, -4,  1, -4,TWO_ROOTS},
-            {0, 2, -2,  1,  0,ONE_ROOT},
-            {1, 2,  1, -1,  0,ONE_ROOT},
-            {1, 2,  3,  0,  0,ZERO_ROOTS},
-            {0, 0, 30,  0,  0,ZERO_ROOTS},
-            {0, 0,  0,  0,  0,INF_ROOTS},
+            {1, 3, -4,  1, -4, TWO_ROOTS},  // x^2 + 3x - 4
+            {0, 2, -2,  1,  0, ONE_ROOT},   // 2x - 2
+            {1, 2,  1, -1,  0, ONE_ROOT},   // x^2 + 2x + 1
+            {1, 2,  3,  0,  0, ZERO_ROOTS}, // x^2 + 2x + 3
+            {0, 0, 30,  0,  0, ZERO_ROOTS}, // 30
+            {0, 0,  0,  0,  0, INF_ROOTS},  // 0
     };
 
     int szTests = sizeof(tests) / sizeof(tests[0]);
@@ -112,6 +99,7 @@ NROOTS_STATUS solveLinearEquation(double a, double b, double *root) {
  */
 NROOTS_STATUS solveQuadraticEquation(double a, double b, double c, double *root1, double *root2) {
     assert(root1 != nullptr && root2 != nullptr);
+    assert(root1 != root2);
     assert(isfinite(a) && isfinite(b) && isfinite(c));
 
     *root1 = 0;
