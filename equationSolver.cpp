@@ -1,7 +1,9 @@
-#include <stdio.h>
-#include <math.h>
-#include <assert.h>
-#include "declarations.h"
+#include <cstdio>
+#include <cmath>
+#include <cassert>
+#include "equationSolver.hpp"
+
+const double EPS = 1e-9;
 
 int main() {
     testCornerCases();
@@ -14,7 +16,7 @@ int main() {
     double root1 = 0, root2 = 0;
     NROOTS_STATUS nRoots = solveQuadraticEquation(a, b, c, &root1, &root2);
 
-    switch(nRoots) {
+    switch(nRoots) { //!
         case TWO_ROOTS:
             printf("Two roots were found. x1 = %.4lg, x2 = %.4lg.\n", root1, root2);
             break;
@@ -39,7 +41,7 @@ int main() {
  * Checks whether doubles are equal with precision.
  * @a, @b - doubles to check for equality.
  */
-bool isEqual(double a, double b, double eps) {
+bool isEqual(double a, double b, double eps = EPS) {
     return abs(a - b) < eps;
 }
 
@@ -52,13 +54,14 @@ void testCornerCases() {
         NROOTS_STATUS status;
     };
 
+    bool hasErrors = false;
     testData tests[] = {
-            {1, 3, -4,  1, -4, TWO_ROOTS},  // x^2 + 3x - 4
-            {0, 2, -2,  1,  0, ONE_ROOT},   // 2x - 2
-            {1, 2,  1, -1,  0, ONE_ROOT},   // x^2 + 2x + 1
-            {1, 2,  3,  0,  0, ZERO_ROOTS}, // x^2 + 2x + 3
-            {0, 0, 30,  0,  0, ZERO_ROOTS}, // 30
-            {0, 0,  0,  0,  0, INF_ROOTS},  // 0
+            {1, 3, -4,  1, -4, TWO_ROOTS},  // x^2 + 3x - 4, quadratic main case
+            {0, 2, -2,  1,  0, ONE_ROOT},   // 2x - 2, linear main case
+            {1, 2,  1, -1,  0, ONE_ROOT},   // x^2 + 2x + 1, D = 0
+            {1, 2,  3,  0,  0, ZERO_ROOTS}, // x^2 + 2x + 3, quadratic zero roots case
+            {0, 0, 30,  0,  0, ZERO_ROOTS}, // 30, linear zero roots case
+            {0, 0,  0,  0,  0, INF_ROOTS},  // 0, the degenerate case
     };
 
     int szTests = sizeof(tests) / sizeof(tests[0]);
@@ -67,9 +70,16 @@ void testCornerCases() {
         NROOTS_STATUS resultStatus = solveQuadraticEquation(
                 tests[i].a, tests[i].b, tests[i].c, &curRoot1, &curRoot2);
 
-        assert(tests[i].root1 == curRoot1);
-        assert(tests[i].root2 == curRoot2);
-        assert(tests[i].status == resultStatus);
+       if (tests[i].status != resultStatus ||
+           tests[i].status == ONE_ROOT && tests[i].root1 != curRoot1 ||
+           tests[i].status == TWO_ROOTS && (tests[i].root1 != curRoot1 || tests[i].root2 != curRoot2)) {
+           hasErrors = true;
+           printf("Test %d was not passed", i + 1);
+       }
+    }
+
+    if (hasErrors) {
+        exit(1);
     }
 }
 
@@ -100,10 +110,7 @@ NROOTS_STATUS solveLinearEquation(double a, double b, double *root) {
 NROOTS_STATUS solveQuadraticEquation(double a, double b, double c, double *root1, double *root2) {
     assert(root1 != nullptr && root2 != nullptr);
     assert(root1 != root2);
-    assert(isfinite(a) && isfinite(b) && isfinite(c));
-
-    *root1 = 0;
-    *root2 = 0;
+    assert(std::isfinite(a) && std::isfinite(b) && std::isfinite(c));
 
     if (isEqual(a, 0)) {
         return solveLinearEquation(b, c, root1);
@@ -114,7 +121,7 @@ NROOTS_STATUS solveQuadraticEquation(double a, double b, double c, double *root1
         return ZERO_ROOTS;
     }
 
-    if (isEqual(discriminant, 0.)) {
+    if (isEqual(discriminant, 0)) {
         *root1 = -b / (2*a);
         return ONE_ROOT;
     }
