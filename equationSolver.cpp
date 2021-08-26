@@ -19,21 +19,11 @@ int main() {
     NROOTS_STATUS nRoots = solveQuadraticEquation(a, b, c, &root1, &root2);
 
     switch(nRoots) {
-        case ZERO_ROOTS:
-            printf("No roots were found.\n");
-            break;
-        case ONE_ROOT:
-            printf("One root was found. x = %.4lg.\n", root1);
-            break;
-        case TWO_ROOTS:
-            printf("Two roots were found. x1 = %.4lg, x2 = %.4lg.\n", root1, root2);
-            break;
-        case INF_ROOTS:
-            printf("There are an infinite number of roots.\n");
-            break;
-        default:
-            printf("main(): unknown nRoots value found!");
-            return 1;
+        case ZERO_ROOTS: printf("No roots were found.\n"); break;
+        case ONE_ROOT:   printf("One root was found. x = %.4lg.\n", root1); break;
+        case TWO_ROOTS:  printf("Two roots were found. x1 = %.4lg, x2 = %.4lg.\n", root1, root2); break;
+        case INF_ROOTS:  printf("There are an infinite number of roots.\n"); break;
+        default:         printf("main(): unknown nRoots value (%d) found!", nRoots); return 1;
     }
 
     return 0;
